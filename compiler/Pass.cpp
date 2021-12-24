@@ -34,7 +34,10 @@ using namespace llvm;
 #define DEBUG(X) ((void)0)
 #endif
 
+
+#if LLVM_VERSION_MAJOR >= 9 && LLVM_VERSION_MAJOR < 12
 char SymbolizePass::ID = 0;
+#endif
 
 bool SymbolizePass::doInitialization(Module &M) {
   DEBUG(errs() << "Symbolizer module init\n");
@@ -45,6 +48,13 @@ bool SymbolizePass::doInitialization(Module &M) {
     auto name = function.getName();
     if (isInterceptedFunction(function))
       function.setName(name + "_symbolized");
+
+    #if LLVM_VERSION_MAJOR >= 13
+      if (!function.isDeclaration())
+        runOnFunction(function);
+    #endif
+
+    
   }
 
   // Insert a constructor that initializes the runtime and any globals.

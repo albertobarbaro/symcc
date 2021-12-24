@@ -15,6 +15,9 @@
 #ifndef PASS_H
 #define PASS_H
 
+
+#if LLVM_VERSION_MAJOR >= 9 && LLVM_VERSION_MAJOR < 12
+
 #include <llvm/IR/GlobalVariable.h>
 #include <llvm/IR/ValueMap.h>
 #include <llvm/Pass.h>
@@ -35,5 +38,42 @@ private:
   llvm::ValueMap<llvm::GlobalVariable *, llvm::GlobalVariable *>
       globalExpressions;
 };
+
+#else
+
+#include <llvm/IR/GlobalVariable.h>
+#include <llvm/Pass.h>
+//#include "llvm/IR/LegacyPassManager.h"
+#include "llvm/Passes/PassBuilder.h"
+#include "llvm/Passes/PassPlugin.h"
+#include "llvm/Support/raw_ostream.h"
+#include "llvm/IR/IRBuilder.h"
+
+using namespace llvm;
+
+class SymbolizePass : public llvm::PassInfoMixin<SymbolizePass> {
+public:
+
+  PreservedAnalyses run(Module &M, ModuleAnalysisManager &) {
+    doInitialization(M);
+    return PreservedAnalyses::all();
+  }
+
+  bool doInitialization(llvm::Module &M);
+  bool runOnFunction(llvm::Function &F);
+
+  static bool isRequired() {
+        return true;
+  }
+
+private:
+  static constexpr char kSymCtorName[] = "__sym_ctor";
+  /// Mapping from global variables to their corresponding symbolic expressions.
+  //llvm::ValueMap<llvm::GlobalVariable *, llvm::GlobalVariable *>
+  //    globalExpressions;
+
+};
+
+#endif
 
 #endif

@@ -15,8 +15,13 @@
 if (QSYM_BACKEND)
   set(SYM_TEST_FILECHECK_ARGS "--check-prefix=QSYM --check-prefix=ANY")
 else()
-  set(SYM_TEST_FILECHECK_ARGS "--check-prefix=SIMPLE --check-prefix=ANY")
+  if (${LLVM_VERSION_MAJOR} GREATER 11)
+      set(SYM_TEST_FILECHECK_ARGS "--check-prefix=SIMPLE --check-prefix=ANY --allow-unused-prefixes")
+  else()
+      set(SYM_TEST_FILECHECK_ARGS "--check-prefix=SIMPLE --check-prefix=ANY")
+  endif()
 endif()
+
 
 configure_file("lit.site.cfg.in" "lit.site.cfg")
 

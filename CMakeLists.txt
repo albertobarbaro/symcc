@@ -115,7 +115,16 @@ if (NOT CLANG_BINARY)
   message(FATAL_ERROR "Clang not found; please make sure that the version corresponding to your LLVM installation is available.")
 endif()
 
-configure_file("compiler/symcc.in" "symcc" @ONLY)
-configure_file("compiler/sym++.in" "sym++" @ONLY)
+if (${LLVM_VERSION_MAJOR} GREATER 12)
+    configure_file("compiler/symccMin13.in" "symcc" @ONLY)
+    configure_file("compiler/symMin13++.in" "sym++" @ONLY)
+else()
+    configure_file("compiler/symcc.in" "symcc" @ONLY)
+    configure_file("compiler/sym++.in" "sym++" @ONLY)
+endif()
+
+
+#configure_file("compiler/symcc.in" "symcc" @ONLY)
+#configure_file("compiler/sym++.in" "sym++" @ONLY)
 
 add_subdirectory(test)
