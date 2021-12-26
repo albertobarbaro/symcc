@@ -33,9 +33,9 @@
 int fac(int x) {
     MYINT result = 1;
 
-    // SIMPLE-COUNT-5: Found diverging input
+    // SIMPLE-COUNT-4: Found diverging input
     // SIMPLE-NOT: Found diverging input
-    // QSYM-COUNT-5: New testcase
+    // QSYM-COUNT-4: New testcase
     for (MYINT i = 2; i <= x; i++)
         result *= i;
 

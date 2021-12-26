@@ -1,0 +1,3 @@
+[submodule "runtime/qsym_backend/qsym"]
+	path = runtime/qsym_backend/qsym
+	url = https://github.com/albertobarbaro/qsym

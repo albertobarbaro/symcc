@@ -13,7 +13,12 @@
 # SymCC. If not, see <https://www.gnu.org/licenses/>.
 
 if (QSYM_BACKEND)
-  set(SYM_TEST_FILECHECK_ARGS "--check-prefix=QSYM --check-prefix=ANY")
+  if (${LLVM_VERSION_MAJOR} GREATER 12)
+	  set(SYM_TEST_FILECHECK_ARGS "--check-prefix=QSYM --check-prefix=ANY --allow-unused-prefixes")
+  else()
+	  set(SYM_TEST_FILECHECK_ARGS "--check-prefix=QSYM --check-prefix=ANY")
+  endif()
+  #set(SYM_TEST_FILECHECK_ARGS "--check-prefix=QSYM --check-prefix=ANY")
 else()
   if (${LLVM_VERSION_MAJOR} GREATER 12)
       set(SYM_TEST_FILECHECK_ARGS "--check-prefix=SIMPLE --check-prefix=ANY --allow-unused-prefixes")
